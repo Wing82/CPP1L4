@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(Animator))]
-[RequireComponent (typeof(GroundCheck))]
+[RequireComponent (typeof(GroundCheck), typeof(Jump))]
 public class PlayerController : MonoBehaviour
 {
     // Component reference
@@ -49,10 +49,8 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = new Vector2(hInput * speed, rb.linearVelocity.y);
 
                 // Add fight "q Button"
-                if (Input.GetButtonDown("Fire1"))
-                {
-                    anim.SetTrigger("fire");
-                } 
+                if (Input.GetButtonDown("Fire1") && isGrounded) anim.SetTrigger("fire"); 
+
             }
             else
             {
@@ -64,11 +62,11 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(hInput * speed, rb.linearVelocity.y);
 
         // Add Jump "Space Button"
-        if (Input.GetButtonDown("Jump") && isGrounded)
-        {
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            anim.SetBool("isGround", isGrounded);
-        }
+        //if (Input.GetButtonDown("Jump") && isGrounded)
+        //{
+        //    rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        //    anim.SetBool("isGround", isGrounded);
+        //}
 
         //if (Input.GetButtonUp("Fire1"))
         //    anim.SetBool("fight", false);
@@ -121,5 +119,28 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("isGround", isGrounded);
         }
 
+    }
+
+    public void ResetRigidbody()
+    {
+        rb.bodyType = RigidbodyType2D.Dynamic;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("PowerUp"))
+        {
+
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        
     }
 }
