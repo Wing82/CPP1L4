@@ -888,7 +888,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bunny_angry
+      name: Bunny_fire1
       rect:
         serializedVersion: 2
         x: 9
@@ -910,7 +910,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bunny_59
+      name: Bunny_fire2
       rect:
         serializedVersion: 2
         x: 46
@@ -932,7 +932,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bunny_angry3
+      name: Bunny_fire3
       rect:
         serializedVersion: 2
         x: 84
@@ -1367,7 +1367,6 @@ TextureImporter:
       Bunny_52: 1913762133
       Bunny_56: 421555268
       Bunny_57: -174461947
-      Bunny_59: 770595179
       Bunny_61: 1568403775
       Bunny_62: 1120274978
       Bunny_63: 2014578628
@@ -1384,10 +1383,11 @@ TextureImporter:
       Bunny_Waiting1: -1218648800
       Bunny_Waiting2: -1247803506
       Bunny_Waiting3: -2078358053
-      Bunny_angry: 1263634738
       Bunny_angry1: -1513761103
       Bunny_angry2: 994747594
-      Bunny_angry3: -681805659
+      Bunny_fire1: 1263634738
+      Bunny_fire2: 770595179
+      Bunny_fire3: -681805659
       Bunny_happy: -1560311865
       Bunny_jump1: -1207965699
       Bunny_jump2: 827331797

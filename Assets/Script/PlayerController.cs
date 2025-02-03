@@ -1,25 +1,21 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(Animator))]
+[RequireComponent (typeof(GroundCheck))]
 public class PlayerController : MonoBehaviour
 {
     // Component reference
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Animator anim;
+    private GroundCheck gndChk;
 
     // Movement Variables
     [Range(3, 10)] // Add range on speed
     public float speed = 5.0f;
     public float jumpForce = 10.0f;
 
-    //groundCheck Variables
-    [Range(0.01f, 0.1f)]
-    public float groundCheckRadius = 0.02f;
-    public LayerMask isGroundLayer;
     public bool isGrounded = false;
-
-    private Transform groundCheck;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,27 +23,42 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        gndChk = GetComponent<GroundCheck>();
 
         // Reset jumpForce to 5.0f, if jumpForce is less then 0
         if (jumpForce < 0) jumpForce = 5.0f;
 
-        sr.flipX = true;
-
-        // groundCheck Initalization
-        GameObject newGameObject = new GameObject();
-        newGameObject.transform.SetParent(transform);
-        newGameObject.transform.localPosition = Vector3.zero;
-        newGameObject.name = "GroundCheck";
-        groundCheck = newGameObject.transform;
+        //sr.flipX = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        AnimatorClipInfo[] curPlayingClips = anim.GetCurrentAnimatorClipInfo(0);
+
         CheckIsGround();
 
         // Get button input to controll left right
         float hInput = Input.GetAxis("Horizontal");
+
+        if(curPlayingClips.Length > 0)
+        {
+            if (!(curPlayingClips[0].clip.name == "Fire"))
+            {
+                // Add speed
+                rb.linearVelocity = new Vector2(hInput * speed, rb.linearVelocity.y);
+
+                // Add fight "q Button"
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    anim.SetTrigger("fire");
+                } 
+            }
+            else
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
+        }
 
         // Add speed
         rb.linearVelocity = new Vector2(hInput * speed, rb.linearVelocity.y);
@@ -57,16 +68,10 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             anim.SetBool("isGround", isGrounded);
-
-            
         }
 
-        // Add fight "q Button"
-        if (Input.GetButtonDown("Fire1"))
-            anim.SetBool("fight", true);
-
-        if (Input.GetButtonUp("Fire1"))
-            anim.SetBool("fight", false);
+        //if (Input.GetButtonUp("Fire1"))
+        //    anim.SetBool("fight", false);
 
         // Add sleep "e Button"
         if (Input.GetButtonDown("Sleep"))
@@ -95,10 +100,10 @@ public class PlayerController : MonoBehaviour
             sr.flipX = (hInput < 0);
             sr.flipX = !sr.flipX;
         }
-        else
-        {
-            sr.flipX = true;
-        }
+        //else
+        //{
+        //    sr.flipX = true;
+        //}
 
         //anim.SetBool("isGrounded", isGrounded);
         anim.SetFloat("speed", Mathf.Abs(hInput));
@@ -108,11 +113,11 @@ public class PlayerController : MonoBehaviour
     {
         if (!isGrounded)
         {
-            if (rb.linearVelocity.y <= 0) isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, isGroundLayer);
+            if (rb.linearVelocity.y <= 0) isGrounded = gndChk.isGrounded();
         }
         else
         {
-            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, isGroundLayer);
+            isGrounded = gndChk.isGrounded();
             anim.SetBool("isGround", isGrounded);
         }
 
