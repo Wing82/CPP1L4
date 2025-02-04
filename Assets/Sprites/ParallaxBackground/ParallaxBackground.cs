@@ -39,6 +39,6 @@ public class ParallaxBackground : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = new Vector2 (cam.transform.position.x, cam.transform.position.y);
+        transform.position = new Vector2 (cam.transform.position.x, transform.position.y);
     }
 }
